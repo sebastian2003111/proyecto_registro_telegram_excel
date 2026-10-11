@@ -1,5 +1,13 @@
+# Credenciales y variables de entorno
 .env
 google_credentials.json
+
+# Entorno virtual
 .venv/
+
+# Archivos de Python
 __pycache__/
-*.pyc
+*.py[cod]
+
+# Pruebas y archivos temporales
+.pytest_cache/
