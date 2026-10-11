@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+requests
+python-dotenv
+gspread
+google-auth
+pydantic[email]
+pytest
+locust

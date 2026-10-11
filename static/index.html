@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Registro académico</title>
+    <style>
+      body {
+        font-family: Arial;
+        background: #f3f4f6;
+        margin: 0;
+      }
+      .box {
+        max-width: 650px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px #0001;
+      }
+      label {
+        display: block;
+        margin-top: 14px;
+        font-weight: bold;
+      }
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 11px;
+        margin-top: 6px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+      button {
+        margin-top: 22px;
+        width: 100%;
+        padding: 13px;
+        border: 0;
+        border-radius: 8px;
+        background: #111827;
+        color: white;
+        font-size: 16px;
+      }
+      #resultado {
+        margin-top: 18px;
+        padding: 12px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <h1>Registro académico</h1>
+      <form id="f">
+        <label>Nombre completo</label><input id="nombre" required />
+        <label>Identificación</label><input id="identificacion" required />
+        <label>Correo</label><input id="correo" type="email" required />
+        <label>Programa</label><input id="programa" required />
+        <label>Semestre</label
+        ><input id="semestre" type="number" min="1" max="20" required />
+        <label>Teléfono</label><input id="telefono" required />
+        <button>Registrar información</button>
+      </form>
+      <div id="resultado"></div>
+    </div>
+    <script>
+      f.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        resultado.textContent = "Procesando...";
+        const datos = {
+          nombre: nombre.value,
+          identificacion: identificacion.value,
+          correo: correo.value,
+          programa: programa.value,
+          semestre: Number(semestre.value),
+          telefono: telefono.value,
+        };
+        try {
+          const r = await fetch("/api/registros", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datos),
+          });
+          const d = await r.json();
+          if (!r.ok) throw Error(d.detail || "Error");
+          resultado.textContent = `✅ Registro realizado.\nExcel: ${d.excel ? "OK" : "No configurado"}\nTelegram: ${d.telegram ? "OK" : "No configurado"}`;
+          e.target.reset();
+        } catch (err) {
+          resultado.textContent = "❌ " + err.message;
+        }
+      });
+    </script>
+  </body>
+</html>
